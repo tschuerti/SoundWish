@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ rname }}</title>
+</head>
+<body>
+    <h1>{{ rname }}</h1>
+    <h2>{{ vs }}</h2>
+    <h1>Login</h1>
+    <form id="stext" method="POST">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Login</button>
+    </form>
+</body>
+<style>
+    /* set font to gill sans */
+    body {
+        font-family: "Gill Sans", sans-serif;
+    }
+    /* Reset some default styles */
+
+/* Basic page styling */
+body {
+    background: {{ background_color }};
+    text-align: center;
+    padding: 20px;
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+h1 {
+    color: #333;
+}
+
+#stext {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+</style>
+</html>

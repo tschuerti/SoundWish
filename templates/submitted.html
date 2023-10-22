@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ rname }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+</head>
+<body>
+    <h1>{{ rname }}</h1>
+    <h2>{{ vs }}</h2>
+    <h2 id="stext">
+        Dankeschön für deinen Wunsch!<br>
+        Er wurde erfolgreich an den DJ übermittelt.<br><br>
+        <a href="/{{vsurl}}"><button>Noch einen Song wünschen</button></a>
+    </h2>
+</body>
+<style>
+    /* set font to gill sans */
+    body {
+        font-family: "Gill Sans", sans-serif;
+    }
+    /* Reset some default styles */
+
+/* Basic page styling */
+body {
+    background: {{ background_color }};
+    text-align: center;
+    padding: 20px;
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+h1 {
+    color: #333;
+}
+
+#stext {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+</style>
+</html>

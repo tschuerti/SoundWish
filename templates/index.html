@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ rname }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+</head>
+<body>
+    <h1>{{ rname }}</h1>
+    <h2>{{ vs }}</h2>
+    <form method="POST">
+        <input type="text" name="name" placeholder="Dein Name" required>
+        
+        <div id="song-search-container">
+            <br>
+            <input type="text" id="song-search" placeholder="Suche nach einem Song" required>
+        </div>
+
+        <input type="text" name="selected_song" id="song-list" style="display: none;" required>
+        <div id="wishes-container">
+        </div><br>
+
+        <textarea name="message" maxlength="256" placeholder="Deine Nachricht an den DJ"></textarea><br><br>
+        
+    
+        <input type="submit" value="Absenden">
+    </form>
+    
+    <script>
+        document.getElementById('song-search').addEventListener('input', function() {
+            var query = this.value;
+    
+            if (query.length >= 3) {
+                fetch('/search_song', {
+                    method: 'POST',
+                    body: new URLSearchParams({ 'query': query }),
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                })
+                .then(response => response.json())
+                .then(tracks => {
+                    
+                    document.getElementById('wishes-container').innerHTML = '';
+                    document.getElementById('song-list').value = "";
+                    tracks.forEach(function(track) {
+                        //var option = document.createElement('option');
+                        //option.text = track.name + ' von ' + track.artists[0].name;
+                        //option.value = track.id; // Set the value to the track ID or another unique identifier if available
+                        //songList.appendChild(option);
+
+                        
+                        //add an div with the song into the songs div
+                        var song = document.createElement('div');
+                        var artists = track.artists.map(artist => artist.name).join(', ');
+                        song.innerHTML = '<img class="thumb" src="' + track.image_url + '" alt="Album Thumbnail"><div class="info"><p><strong>' + track.name + '</strong></p><p><strong>' +  artists + '</strong></p></div>';
+                        song.value = track.id;
+                        song.id = track.id;
+                        song.className = 'wish-box';
+                        song.onclick = function() {
+                            var songList = document.getElementById('song-list');
+                            songList.value = this.value;
+                            //set all bordes to black
+                            var songs = document.getElementsByClassName('wish-box');
+                            for (var i = 0; i < songs.length; i++) {
+                                songs[i].style.border = 'none';
+                            }
+                            //set border of selected song to red
+                            this.style.border = '5px solid red';
+                            //remove all other songs except the selected one
+                            var wishes = document.getElementById('wishes-container');
+                            while (wishes.firstChild) {
+                                wishes.removeChild(wishes.firstChild);
+                            }
+                            wishes.appendChild(this);
+                            //hide search input
+                            document.getElementById('song-search-container').style.display = 'none';
+                        };
+                        document.getElementById('wishes-container').appendChild(song);
+                    });
+                });
+            } else {
+                document.getElementById('wishes-container').innerHTML = '';
+            }
+        });
+    </script>
+    
+    
+</body>
+<style>
+    /* set font to gill sans */
+    body {
+        font-family: "Gill Sans", sans-serif;
+    }
+    /* Reset some default styles */
+body, h1, form {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic page styling */
+body {
+    background: {{ background_color }};
+    text-align: center;
+    padding: 20px;
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+h1 {
+    color: #333;
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+input[type="text"],
+textarea {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 500px;
+  height: 2.5rem;
+  font-size: large;
+  resize: none;
+}
+
+#song-search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+textarea {
+  height: 7.5rem;
+}
+
+input[type="submit"] {
+  background-color: #007acc;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+input[type="submit"]:hover {
+  background-color: #005fa3;
+}
+
+#wishes-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.wish-box {
+    max-width: 480px;
+    width: 95%;
+    position: relative;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 10px 0;
+    cursor: pointer;
+    display: flex; /* Use flex layout */
+    align-items: center; /* Center vertically */
+    height: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.thumb {
+    width: 0.5rem;
+    height: auto;
+    flex: 1;
+    margin-right: 1rem;
+    border-radius: 15px;
+    border-top-right-radius: 15px;
+    box-shadow: 5px 5px 50px -12px #000000
+
+}
+
+.wish-box .info {
+    flex: 2; /* Allow text content to grow and occupy remaining space */
+    text-align: left;
+    align-self: start;
+}
+
+/* add dark mode */
+@media (prefers-color-scheme: dark) {
+    input[type="text"],
+    textarea {
+        background-color: #222222;
+        color: #fff;
+    }
+    input[type="submit"] {
+        background-color: #007acc;
+        color: #fff;
+    }
+    .wish-box {
+        background-color: #222222;
+        color: #fff;
+    }
+    .wish-box .info {
+        color: #fff;
+    }
+}
+
+</style>
+</html>
