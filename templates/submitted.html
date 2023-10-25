@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>{{ rname }}</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <link rel="icon" type="image/png" sizes="16x16" href="/media/favicon.png">
 </head>
@@ -20,6 +21,26 @@
 body {
     font-family: 'Varela Round', sans-serif;
 }
+    /* Reset some default styles */
+body, h1, form {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic page styling */
+body {
+    background: {{ background_color }};
+    text-align: center;
+    padding: 20px;
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
 
 #rname {
     font-family: 'Pacifico', sans-serif;
@@ -34,20 +55,6 @@ body {
     font-weight: normal;
     text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     margin-top: 5px;
-}
-/* Basic page styling */
-body {
-    background: {{ background_color }};
-    text-align: center;
-    padding: 20px;
-    height: 100%;
-    margin: 0;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-
-h1 {
-    color: #333;
 }
 
 #stext {
@@ -68,10 +75,9 @@ button {
     transition: background-color 0.2s ease-in-out;
     font-weight: bold;
     color: black;
-    font-family: 'Varela Round', sans-serif;
 }
 
-button:hover {
+button {
   background-color: #ffffff;
 }
 
