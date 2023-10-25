@@ -1,3 +1,1 @@
-{"name": "Fasnacht", "veranstalter": "Feuerwehr & Kerwejugend Elmshausen", "url": "fasnacht2024", "password" : "1234", "background_color": "linear-gradient(to bottom, #C33764, #1D2671);"}
-{"name": "Teichfest", "veranstalter": "Kerwejugend Elmshausen", "url": "teichfest2024", "password" : "1234", "background_color": "linear-gradient(#9fc125, #29a364, #18657d, #162949)"}
-{"name": "80er Party", "veranstalter": "Kerwejugend Elmshausen", "url": "80erparty2024", "password" : "1234", "background_color": "linear-gradient(#9400D3, #FF1493, #1E90FF)"}
+{"name": "Demo", "veranstalter": "Demo", "url": "demo", "password" : "1234", "background_color": "linear-gradient(#9400D3, #FF1493, #1E90FF)"}
