@@ -2,10 +2,11 @@
 <html>
 <head>
     <title>{{ rname }}</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/media/favicon.png">
 </head>
 <body>
-    <h1>{{ rname }}</h1>
-    <h2>{{ vs }}</h2>
+    <h1 id="rname">{{ rname }}</h1>
+    <h2 id="vs">{{ vs }}</h2>
     <h1>Login</h1>
     <form id="stext" method="POST">
         <label for="password">Password:</label>
@@ -14,12 +15,11 @@
     </form>
 </body>
 <style>
-    /* set font to gill sans */
-    body {
-        font-family: "Gill Sans", sans-serif;
-    }
-    /* Reset some default styles */
+@import url(/media/fonts.css);
 
+body {
+    font-family: 'Varela Round', sans-serif;
+}
 /* Basic page styling */
 body {
     background: {{ background_color }};
@@ -29,6 +29,21 @@ body {
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
+}
+
+#rname {
+    font-family: 'Pacifico', sans-serif;
+    font-size: 3.5rem;
+    color: white;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+#vs {
+    font-family: 'Gochi Hand', sans-serif;
+    color: white;
+    font-weight: normal;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    margin-top: 5px;
 }
 
 h1 {

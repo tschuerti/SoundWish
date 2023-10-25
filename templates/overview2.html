@@ -5,10 +5,11 @@
     <meta http-equiv="refresh" content="30">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="/media/favicon.png">
 </head>
 <body>
-    <h1 style="color: white;">{{ name }}</h1>
-    <h2>{{ vs }}</h2>
+    <h1 id="rname">{{ name }}</h1>
+    <h2 id="vs">{{ vs }}</h2>
 
     {% if session.password %}
     <form method="GET" action="{{ url_for('logout', name=url)  }}">
@@ -40,7 +41,26 @@
     </div>
 </body>
 <style>
-    /* styles.css */
+@import url(/media/fonts.css);
+
+body {
+    font-family: 'Varela Round', sans-serif;
+}
+
+#rname {
+    font-family: 'Pacifico', sans-serif;
+    font-size: 3.5rem;
+    color: white;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+#vs {
+    font-family: 'Gochi Hand', sans-serif;
+    color: white;
+    font-weight: normal;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    margin-top: 5px;
+}
 
 /* Reset some default styles */
 body, h1, form {
@@ -50,7 +70,6 @@ body, h1, form {
 
 /* Basic page styling */
 body {
-    font-family: Arial, sans-serif;
     background: {{ background_color }};
     text-align: center;
     padding: 20px;

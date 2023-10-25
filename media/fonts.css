@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'Varela Round';
+    src: url('/media/VarelaRound-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nosifer';
+    src: url('/media/Nosifer-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Pacifico';
+    src: url('/media/Pacifico-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Gochi Hand';
+    src: url('/media/GochiHand-Regular.ttf') format('truetype');
+}

@@ -1,14 +1,16 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session, send_file
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 import json
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 
 # Replace with your Spotify API credentials
-CLIENT_ID = ''
-CLIENT_SECRET = ''
+CLIENT_ID = os.getenv('CLIENT_ID')
+CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 
 # Initialize Spotipy client
 sp = Spotify(auth_manager=SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
@@ -44,7 +46,7 @@ def overview(name):
             wish['song_name'] = track_info['name']
             wish['artist_name'] = track_info['artists'][0]['name']
             if len(track_info['artists']) > 1:
-                for i in range(1, len(track_info['artists'])):
+                for i in range(2):
                     wish['artist_name'] += ", " + track_info['artists'][i]['name']
             wish['spotify_url'] = track_info['external_urls']['spotify']
             wish['thumbnail_url'] = track_info['album']['images'][0]['url']
@@ -302,6 +304,10 @@ def submitted(name):
             vsurl = event['url']
             break
     return render_template('submitted.html', vs = vs, rname=rname, background_color=background_color, vsurl=vsurl)
+
+@app.route('/media/<file>')
+def media(file):
+    return send_file("./media/" + file)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
