@@ -49,7 +49,7 @@ def overview(name):
     if pasw not in session:
         return redirect("/" + name + "/login")
     if session[pasw] != PASSWORD:
-        session.pop('password', None)
+        session.pop(pasw, None)
         return redirect("/" + name + "/login")
 
     # Read the submitted wishes from the JSON file
