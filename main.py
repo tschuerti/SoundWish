@@ -3,10 +3,14 @@ from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 import json
 import os
+import io
+import qrcode
 from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+
+bsurl = "http://192.168.2.113:5000/"
 
 # Replace with your Spotify API credentials
 CLIENT_ID = os.getenv('CLIENT_ID')
@@ -343,6 +347,34 @@ def submitted(name):
             vsurl = event['url']
             break
     return render_template('submitted.html', vs = vs, rname=rname, background_color=background_color, vsurl=vsurl)
+
+@app.route('/<name>/qr')
+def qr(name):
+    # if the event exists, generate a QR code
+    events = []
+    with open('events.json', 'r') as f:
+        for line in f:
+            event = json.loads(line)
+            events.append(event)
+    event_exists = False
+    for event in events:
+        if event['url'] == name:
+            event_exists = True
+            break
+    if not event_exists:
+        return "Event not found"
+    
+    # Generate the QR code
+    qr_data = bsurl + name
+    img = qrcode.make(qr_data)
+    
+    # Create an in-memory file
+    img_data = io.BytesIO()
+    img.save(img_data, format='PNG')
+    img_data.seek(0)  # Reset the buffer position to the beginning
+
+    # Serve the QR code as a temporary file
+    return send_file(img_data, mimetype='image/png')
 
 @app.route('/media/<file>')
 def media(file):
