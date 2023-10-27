@@ -36,11 +36,19 @@ def overview(name):
             vs = event['veranstalter']
             url = event['url']
             break
+    event_exists = False
+    for event in events:
+        if event['url'] == name:
+            event_exists = True
+            break
+    if not event_exists:
+        return "Event not found"
     PASSWORD = event['password']
     print(PASSWORD)
-    if 'password' not in session:
+    pasw = name + "_password"
+    if pasw not in session:
         return redirect("/" + name + "/login")
-    if session['password'] != PASSWORD:
+    if session[pasw] != PASSWORD:
         session.pop('password', None)
         return redirect("/" + name + "/login")
 
@@ -116,8 +124,16 @@ def overviewplayed(name):
         for line in f:
             event = json.loads(line)
             events.append(event)
+    event_exists = False
+    for event in events:
+        if event['url'] == name:
+            event_exists = True
+            break
+    if not event_exists:
+        return "Event not found"
     PASSWORD = event['password']
-    if 'password' not in session or session['password'] != PASSWORD:
+    pasw = name + "_password"
+    if pasw not in session or session[pasw] != PASSWORD:
         return redirect("/" + name + "/login")
 
     # Read the submitted wishes from the JSON file
@@ -161,8 +177,17 @@ def overviewdeleted(name):
         for line in f:
             event = json.loads(line)
             events.append(event)
+    event_exists = False
+    for event in events:
+        if event['url'] == name:
+            event_exists = True
+            break
+    if not event_exists:
+        return "Event not found"
+
     PASSWORD = event['password']
-    if 'password' not in session or session['password'] != PASSWORD:
+    pasw = name + "_password"
+    if pasw not in session or session[pasw] != PASSWORD:
         return redirect("/" + name + "/login")
 
     # Read the submitted wishes from the JSON file
@@ -205,7 +230,6 @@ def login(name):
         for line in f:
             event = json.loads(line)
             events.append(event)
-
     for event in events:
         if event['url'] == name:
             background_color = event['background_color']
@@ -213,18 +237,27 @@ def login(name):
             vs = event['veranstalter']
             vsurl = event['url']
             break
+    event_exists = False
+    for event in events:
+        if event['url'] == name:
+            event_exists = True
+            break
+    if not event_exists:
+        return "Event not found"
     PASSWORD = event['password']
 
     if request.method == 'POST':
         password_attempt = request.form.get('password')
         # set the password to the one defined in the event.json file
+        pasw = name + "_password"
         if password_attempt == PASSWORD:
-            session['password'] = PASSWORD
+            session[pasw] = PASSWORD
             return redirect("/" + name + "/overview")
         else:
             return render_template('login.html', vs = vs, rname=rname, background_color=background_color, vsurl=vsurl, error=True)
     else:
-        if 'password' in session and session['password'] == PASSWORD:
+        pasw = name + "_password"
+        if pasw in session and session[pasw] == PASSWORD:
             return redirect("/" + name + "/overview")
         else:
             return render_template('login.html', vs = vs, rname=rname, background_color=background_color, vsurl=vsurl, error=False)
