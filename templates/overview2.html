@@ -98,9 +98,26 @@ body {
 }
 
 {% if not wishes %}
-    #stext {
-        display: block;
+#stext {
+    display: block;
+}
+
+/* put the buttons on the bottom */
+@media (max-width: 1200px) {
+    form {
+        position: fixed;
+        bottom: 20px;
+        font-family: 'Varela Round', sans-serif;
+        left: 50%;
+        transform: translateX(-50%);
     }
+    form:first-of-type {
+        bottom: 80px;
+    }
+    form:nth-of-type(2) {
+        bottom: 140px;
+    }
+}
 {% endif %}
 
 .sbtn {
