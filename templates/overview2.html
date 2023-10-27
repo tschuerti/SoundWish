@@ -1,30 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Overview | {{ name }} - {{ vs }}</title>
+    <title>Overview - {{type}} | {{ name }} - {{ vs }}</title>
     <meta http-equiv="refresh" content="30">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
     <link rel="icon" type="image/png" sizes="16x16" href="/media/favicon.png">
 </head>
 <body>
     <h1 id="rname">{{ name }}</h1>
     <h2 id="vs">{{ vs }}</h2>
-
-    {% if session.password %}
-    <form method="GET" action="{{ url_for('logout', name=url)  }}">
-        <button type="submit">Logout</button>
-    </form>
-    <form method="GET" action="/{{ url }}/overview">
-        <button type="submit">Home</button>
-    </form>
-    {% endif %}
-
-
-
+    <h2 style="color: white;">{{type}} Wünsche</h2>
     <div class="wishes-container">
         {% for wish in wishes %}
-        <a href="{{ wish.spotify_url }}" target="_blank" style="color: black; text-decoration: none;" class="wish-box">
+        <a href="spotify:track:{{ wish.selected_song }}" target="_blank" style="color: black; text-decoration: none;" class="wish-box">
             <img class="thumb" src="{{ wish.thumbnail_url }}" alt="Album Thumbnail">
             <div class="info">
                 <p><strong>Song:</strong> {{ wish.song_name }}</p>
@@ -39,12 +29,48 @@
         </a>
         {% endfor %}
     </div>
+    <br><br>
+    <form method="GET" action="/{{ url }}/overview">
+        <button id="del" class="Btn" type="submit">
+  
+            <div class="sign"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg></div>
+            
+            <div class="text">Home</div>
+        </button>
+    </form><br>
+    <form method="GET" action="{{ url_for('logout', name=url)  }}">
+        <button id="log" class="Btn" type="submit">
+  
+            <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
+            
+            <div class="text">Logout</div>
+        </button>          
+    </form><br>
+    <h2 id="stext">
+        Ziemlich leer hier!<br>
+        Es ist aktuell kein <b style="text-transform:lowercase">{{type}}n</b> Wunsch.
+    </h2>
 </body>
 <style>
 @import url(/media/fonts.css);
 
 body {
     font-family: 'Varela Round', sans-serif;
+}
+
+/* Reset some default styles */
+body, h1 {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic page styling */
+body {
+    background: {{ background_color }};
+    text-align: center;
+    padding: 20px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 #rname {
@@ -62,19 +88,33 @@ body {
     margin-top: 5px;
 }
 
-/* Reset some default styles */
-body, h1, form {
-    margin: 0;
-    padding: 0;
+#stext {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
 }
 
-/* Basic page styling */
-body {
-    background: {{ background_color }};
-    text-align: center;
-    padding: 20px;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+{% if not wishes %}
+    #stext {
+        display: block;
+    }
+{% endif %}
+
+.sbtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    margin-left: 5px;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.sbtn:hover {
+    opacity: 0.75;
 }
 
 h1 {
@@ -93,7 +133,7 @@ h1 {
 }
 
 .wish-box {
-    width: 100%;
+    width: 90%;
     position: relative;
     background-color: #fff;
     border-radius: 15px;
@@ -105,6 +145,8 @@ h1 {
     display: flex; /* Use flex layout */
     align-items: center; /* Center vertically */
     height: 10rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 100%;
 }
 
 .wish-box img {
@@ -127,9 +169,10 @@ h1 {
     flex: 2; /* Allow text content to grow and occupy remaining space */
     text-align: left;
     align-self: start;
+    padding-right: 10px;
 }
 
-.info2{
+.info2 {
     flex: 3; /* Allow text content to grow and occupy remaining space */
     text-align: left;
     align-self: start;
@@ -137,6 +180,212 @@ h1 {
 
 .message {
     width: 80%;
+}
+
+:root {
+    --mc: #222222;
+    --mc2: #f3f3f3;
+}
+
+.Btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: .3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: var(--mc2);
+}
+
+/* plus sign */
+.sign {
+  width: 100%;
+  transition-duration: .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign svg {
+  width: 17px;
+}
+
+.sign svg path {
+  fill: var(--mc);
+}
+/* text */
+.text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: var(--mc);
+  font-size: 1.2em;
+  font-weight: 600;
+  transition-duration: .3s;
+}
+/* hover effect on button width */
+.Btn:hover {
+  width: 125px;
+  border-radius: 5px;
+  transition-duration: .3s;
+}
+
+.Btn:hover .sign {
+  width: 30%;
+  transition-duration: .3s;
+}
+/* hover effect button's text */
+.Btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: .3s;
+  padding-right: 10px;
+}
+/* button click effect*/
+.Btn:active {
+  transform: translate(2px ,2px);
+}
+
+/* fix the button on the bottom right corner */
+.Btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-family: 'Varela Round', sans-serif;
+}
+
+/*put each button on the top of each other*/
+#del {
+  bottom: 80px;
+}
+
+#pla {
+  bottom: 140px;
+}
+
+#pla svg,
+#del svg {
+  width: 25px;
+}
+
+.forms {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+@media (max-width: 1200px) {
+    .Btn {
+        width: 125px;
+        border-radius: 5px;
+        transition-duration: .3s;
+        position: relative;
+        bottom: 0px;
+        position: relative; 
+        left: calc(50% - 62.5px);
+    }
+
+    .Btn .sign {
+      width: 30%;
+      transition-duration: .3s;
+    }
+    /* hover effect button's text */
+    .Btn .text {
+      opacity: 1;
+      width: 70%;
+      transition-duration: .3s;
+      padding-right: 10px;
+    }
+    /* button click effect*/
+    .Btn {
+      transform: translate(2px ,2px);
+    }
+    #del {
+        bottom: 0px;
+    }
+
+    #pla {
+        bottom: 0px;
+        top: 0px;
+    }
+}
+
+/* add an dark mode */
+@media (prefers-color-scheme: dark) {
+    .wish-box {
+        background-color: #222222;
+        color: #fff;
+    }
+    .wish-box, .info, .info2 {
+        color: #fff;
+    }
+
+    .svgb {
+        fill: #fff;
+    }
+
+    .svga {
+        stroke: #fff;
+    }
+
+    :root {
+        --mc2: #222222;
+        --mc: #f3f3f3;
+    }
+}
+
+@media (max-width: 750px) {
+    /* put the image on the top  and the buttons under the infos*/
+    .wish-box {
+        max-width: 480px;
+        width: 90%;
+        display: block;
+    }
+
+    .wish-box img {
+        margin-right: 0;
+        margin-bottom: 10px;
+        height: 100%;
+        width: 100%;
+        border-radius: 15px;
+        border-top-right-radius: 15px;
+        box-shadow: 5px 5px 50px -12px #000000
+    }
+
+    .forms {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* center the infos */
+    .wish-box .info,
+    .wish-box .info2 {
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .info strong,
+    .info2 strong {
+        display: block;
+    }
+
+    .message {
+        width: unset;
+    }
+
+    /* center info right */
+    .wish-box .info {
+        padding-right: 0px;
+    }
 }
 </style>
 </html>

@@ -263,8 +263,9 @@ def login(name):
 
 @app.route('/<name>/logout')
 def logout(name):
-    session.pop('password', None)
-    return redirect("/" + name + "/overview")
+    pasw = name + "_password"
+    session.pop(pasw, None)
+    return redirect("/" + name + "/login")
 
 
 @app.route('/<name>', methods=['GET', 'POST'])
