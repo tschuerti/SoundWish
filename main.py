@@ -44,7 +44,6 @@ def overview(name):
     if not event_exists:
         return "Event not found"
     PASSWORD = event['password']
-    print(PASSWORD)
     pasw = name + "_password"
     if pasw not in session:
         return redirect("/" + name + "/login")
