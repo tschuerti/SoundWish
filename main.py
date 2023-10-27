@@ -28,8 +28,20 @@ def overview(name):
         for line in f:
             event = json.loads(line)
             events.append(event)
+    
+    for event in events:
+        if event['url'] == name:
+            background_color = event['background_color']
+            rname = event['name']
+            vs = event['veranstalter']
+            url = event['url']
+            break
     PASSWORD = event['password']
-    if 'password' not in session or session['password'] != PASSWORD:
+    print(PASSWORD)
+    if 'password' not in session:
+        return redirect("/" + name + "/login")
+    if session['password'] != PASSWORD:
+        session.pop('password', None)
         return redirect("/" + name + "/login")
 
     # Read the submitted wishes from the JSON file
@@ -93,14 +105,7 @@ def overview(name):
                         json.dump(wish, f)
                         f.write('\n')
         return redirect(url_for('overview', name=name))
-
-    for event in events:
-        if event['url'] == name:
-            background_color = event['background_color']
-            rname = event['name']
-            vs = event['veranstalter']
-            url = event['url']
-            break
+    
     return render_template('overview.html', wishes=wishes, name=rname, background_color=background_color, vs=vs, url=url)
 
 @app.route('/<name>/overview/played')
@@ -195,25 +200,12 @@ def overviewdeleted(name):
 
 @app.route('/<name>/login', methods=['GET', 'POST'])
 def login(name):
-    if request.method == 'POST':
-        password_attempt = request.form.get('password')
-        # set the password to the one defined in the event.json file
-        events = []
-        with open('events.json', 'r') as f:
-            for line in f:
-                event = json.loads(line)
-                events.append(event)
-        PASSWORD = event['password']
-        if password_attempt == PASSWORD:
-            session['password'] = PASSWORD
-            return redirect("/" + name + "/overview")
-        
     events = []
     with open('events.json', 'r') as f:
         for line in f:
             event = json.loads(line)
             events.append(event)
-        
+
     for event in events:
         if event['url'] == name:
             background_color = event['background_color']
@@ -221,7 +213,21 @@ def login(name):
             vs = event['veranstalter']
             vsurl = event['url']
             break
-    return render_template('login.html', vs = vs, rname=rname, background_color=background_color, vsurl=vsurl)
+    PASSWORD = event['password']
+
+    if request.method == 'POST':
+        password_attempt = request.form.get('password')
+        # set the password to the one defined in the event.json file
+        if password_attempt == PASSWORD:
+            session['password'] = PASSWORD
+            return redirect("/" + name + "/overview")
+        else:
+            return render_template('login.html', vs = vs, rname=rname, background_color=background_color, vsurl=vsurl, error=True)
+    else:
+        if 'password' in session and session['password'] == PASSWORD:
+            return redirect("/" + name + "/overview")
+        else:
+            return render_template('login.html', vs = vs, rname=rname, background_color=background_color, vsurl=vsurl, error=False)
 
 @app.route('/<name>/logout')
 def logout(name):

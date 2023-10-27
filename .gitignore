@@ -1,3 +1,4 @@
 .env
 /json/
 .cache
+/__pycache__/
