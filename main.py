@@ -27,6 +27,7 @@ app.secret_key = os.urandom(24)
 @app.route('/<name>/overview', methods=['GET', 'POST'])
 def overview(name):
     submissions_file = 'json/' + name  + '.json'
+
     events = []
     with open('events.json', 'r') as f:
         for line in f:
@@ -57,6 +58,9 @@ def overview(name):
 
     # Read the submitted wishes from the JSON file
     wishes = []
+    if not os.path.exists(submissions_file):
+        with open(submissions_file, 'w') as f:
+            f.write('')
     with open(submissions_file, 'r') as f:
         for line in f:
             wish = json.loads(line)
