@@ -1,4 +1,4 @@
-[# SoundWish](https://raw.githubusercontent.com/tschuerti/SoundWish/refs/heads/main/media/logo.png)
+![SoundWish]((https://raw.githubusercontent.com/tschuerti/SoundWish/refs/heads/main/media/logo.png))
 
 SoundWish is a Flask-based web application that allows users to submit song requests for events. The application integrates with the Spotify API to search for songs and display track information.
 
