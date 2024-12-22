@@ -24,6 +24,15 @@ app.secret_key = os.urandom(24)
 
 # ... (Other routes and code)
 
+@app.route('/')
+def home():
+    return redirect("https://github.com/tschuerti/SoundWish")
+
+#404 error page
+@app.errorhandler(404)
+def page_not_found(e):
+    return redirect("https://github.com/tschuerti/SoundWish")
+
 @app.route('/<name>/overview', methods=['GET', 'POST'])
 def overview(name):
     submissions_file = 'json/' + name  + '.json'
